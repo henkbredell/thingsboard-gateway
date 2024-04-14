@@ -99,7 +99,7 @@
         "connectorHandler",
         "consoleHandler"
       ],
-      "level": "INFO",
+      "level": "DEBUG",
       "propagate": false
     },
     "converter": {

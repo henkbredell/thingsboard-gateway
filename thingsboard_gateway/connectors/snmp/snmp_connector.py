@@ -40,7 +40,8 @@ if installation_required:
     print("Modbus library not found - installing...")
     TBUtility.install_package("puresnmp", ">=2.0.0")
 
-from puresnmp import Client, credentials, PyWrapper
+# <hb> added import for version of the snmp module
+from puresnmp import Client, credentials, PyWrapper, V2C
 from puresnmp.exc import Timeout as SNMPTimeoutException
 
 
@@ -125,7 +126,16 @@ class SNMPConnector(Connector, Thread):
 
     async def __process_data(self, device):
         common_parameters = self.__get_common_parameters(device)
-        converted_data = {}
+        # hb
+        # converted_data = {}
+        converted_data = {
+            "deviceName": device["deviceName"],
+            "deviceType": device["deviceType"],
+            "attributes": [],
+            "telemetry": []
+            }
+        # /hb
+
         for datatype in self.__datatypes:
             for datatype_config in device[datatype]:
                 try:
@@ -139,7 +149,11 @@ class SNMPConnector(Connector, Thread):
                     if method not in self.__methods:
                         self._log.error("Unknown method: %s, configuration is: %r", method, datatype_config)
                     response = await self.__process_methods(method, common_parameters, datatype_config)
-                    converted_data.update(**device["uplink_converter"].convert((datatype, datatype_config), response))
+                    #print("<hb> converted data before: ", converted_data)
+                    print("device data type", datatype)
+                    # converted_data.update(**device["uplink_converter"].convert((datatype, datatype_config), response))
+                    converted_data[datatype].append(device["uplink_converter"].convert((datatype, datatype_config), response))
+                    print("<hb> converted data after: ", converted_data)
                 except SNMPTimeoutException:
                     self._log.error("Timeout exception on connection to device \"%s\" with ip: \"%s\"", device["deviceName"],
                               device["ip"])
@@ -147,13 +161,19 @@ class SNMPConnector(Connector, Thread):
                 except Exception as e:
                     self._log.exception(e)
 
+        # print("<hb> converted data ", converted_data)
         if isinstance(converted_data, dict) and (converted_data.get("attributes") or converted_data.get("telemetry")):
             self.collect_statistic_and_send(self.get_name(), self.get_id(), converted_data)
 
     async def __process_methods(self, method, common_parameters, datatype_config):
+        # changes for snmp version 2
+        #client = Client(ip=common_parameters['ip'],
+        #                port=common_parameters['port'],
+        #                credentials=credentials.V1(common_parameters['community']))
         client = Client(ip=common_parameters['ip'],
                         port=common_parameters['port'],
-                        credentials=credentials.V1(common_parameters['community']))
+                        credentials=V2C(common_parameters['community']))
+
         client.configure(timeout=common_parameters['timeout'])
         client = PyWrapper(client)
 

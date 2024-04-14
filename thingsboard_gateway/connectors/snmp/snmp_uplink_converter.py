@@ -24,30 +24,53 @@ class SNMPUplinkConverter(Converter):
     @StatisticsService.CollectStatistics(start_stat_type='receivedBytesFromDevices',
                                          end_stat_type='convertedBytesFromDevice')
     def convert(self, config, data):
-        result = {
-            "deviceName": self.__config["deviceName"],
-            "deviceType": self.__config["deviceType"],
-            "attributes": [],
-            "telemetry": []
-            }
+        # hb
+        #result = {
+        #    "deviceName": self.__config["deviceName"],
+        #    "deviceType": self.__config["deviceType"],
+        #    "attributes": [],
+        #    "telemetry": []
+        #    }
+        result = {}
+        print("<hb> DATA", data)
+        # /hb
         try:
             if isinstance(data, dict):
+                print("dict")
                 result[config[0]].append({config[1]["key"]: {str(k): str(v) for k, v in data.items()}})
             elif isinstance(data, list):
+                print("list")
                 if isinstance(data[0], str):
+                    print("list - str")
                     result[config[0]].append({config[1]["key"]: ','.join(data)})
                 elif isinstance(data[0], dict):
+                    # hb
+                    print("list - dict")
+
                     res = {}
                     for item in data:
                         res.update(**item)
-                    result[config[0]].append({config[1]["key"]: {str(k): str(v) for k, v in res.items()}})
+                    # hb
+                    # result[config[0]].append({config[1]["key"]: {str(k): str(v) for k, v in res.items()}})
+                    result = {str(config[1]["key"]+"_"+k): str(v) for k, v in res.items()}
+
             elif isinstance(data, str):
+                print("str")
                 result[config[0]].append({config[1]["key"]: data})
             elif isinstance(data, bytes):
-                result[config[0]].append({config[1]["key"]: data.decode("UTF-8")})
+                # hb
+                print("bytes")
+                # result[config[0]].append({config[1]["key"]: data.decode("UTF-8")})
+                result = {config[1]["key"]: data.decode("UTF-8")}
+                # /hb
             else:
-                result[config[0]].append({config[1]["key"]: data})
+                # hb
+                print("else")
+                # result[config[0]].append({config[1]["key"]: data})
+                result = {config[1]["key"]: data}
+                # /hb
             self._log.debug(result)
         except Exception as e:
             self._log.exception(e)
+        print("<hb> result:", result)
         return result

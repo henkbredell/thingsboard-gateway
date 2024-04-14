@@ -1,9 +1,9 @@
 {
   "thingsboard": {
-    "host": "thingsboard.cloud",
+    "host": "104.154.198.254",
     "port": 1883,
     "remoteShell": false,
-    "remoteConfiguration": true,
+    "remoteConfiguration": false,
     "statistics": {
       "enable": true,
       "statsSendPeriodInSeconds": 3600
@@ -15,17 +15,17 @@
     "maxPayloadSizeBytes": 1024,
     "minPackSendDelayMS": 200,
     "minPackSizeToSend": 500,
-    "checkConnectorsConfigurationInSeconds": 60,
+    "checkConnectorsConfigurationInSeconds": 30,
     "handleDeviceRenaming": true,
     "security": {
       "type": "accessToken",
-      "accessToken": "YOUR_ACCESS_TOKEN"
+      "accessToken": "GATEWAY_TOKEN"
     },
     "qos": 1,
     "checkingDeviceActivity": {
-      "checkDeviceInactivity": false,
+      "checkDeviceInactivity": true,
       "inactivityTimeoutSeconds": 200,
-      "inactivityCheckPeriodSeconds": 500
+      "inactivityCheckPeriodSeconds": 300
     }
   },
   "storage": {
@@ -52,5 +52,11 @@
     "keepAliveTimeMs": 10000,
     "keepAliveTimeoutMs": 5000
   },
-  "connectors": []
+  "connectors": [
+    {
+      "type": "snmp",
+      "name": "snmp_gateway",
+      "configuration": "snmp.json"
+    }
+  ]
 }

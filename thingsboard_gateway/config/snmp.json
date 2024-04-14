@@ -1,138 +1,135 @@
 {
   "devices": [
     {
-      "deviceName": "SNMP router",
+      "deviceName": "ups0001",
       "deviceType": "snmp",
-      "ip": "snmp.live.gambitcommunications.com",
+      "ip": "172.24.80.117",
       "port": 161,
-      "pollPeriod": 5000,
+      "pollPeriod": 60000,
       "community": "public",
       "attributes": [
         {
-          "key": "ReceivedFromGet",
+          "key": "upsManufacturer",
           "method": "get",
-          "oid": "1.3.6.1.2.1.1.1.0",
+          "oid": "1.3.6.1.2.1.33.1.1.1.0",
           "timeout": 6
         },
         {
-          "key": "ReceivedFromMultiGet",
-          "method": "multiget",
-          "oid": [
-            "1.3.6.1.2.1.1.1.0",
-            "1.3.6.1.2.1.1.2.0"
-          ],
+          "key": "upsIdentModel",
+          "method": "get",
+          "oid": "1.3.6.1.2.1.33.1.1.2.0",
           "timeout": 6
         },
         {
-          "key": "ReceivedFromGetNext",
-          "method": "getnext",
-          "oid": "1.3.6.1.2.1.1.1.0",
+          "key": "upsSoftwareVersion",
+          "method": "get",
+          "oid": "1.3.6.1.2.1.33.1.1.3.0",
           "timeout": 6
         },
         {
-          "key": "ReceivedFromMultiWalk",
-          "method": "multiwalk",
-          "oid": [
-            "1.3.6.1.2.1.1.1.0",
-            "1.3.6.0.1.2.1"
-          ]
+          "key": "upsIdentAgentSoftwareVersion",
+          "method": "get",
+          "oid": "1.3.6.1.2.1.33.1.1.4.0",
+          "timeout": 6
         },
         {
-          "key": "ReceivedFromBulkWalk",
-          "method": "bulkwalk",
-          "oid": [
-            "1.3.6.1.2.1.1.1.0",
-            "1.3.6.1.2.1.1.2.0"
-          ]
+          "key": "upsIdentName",
+          "method": "get",
+          "oid": "1.3.6.1.2.1.33.1.1.5.0",
+          "timeout": 6
         },
         {
-          "key": "ReceivedFromBulkGet",
-          "method": "bulkget",
-          "scalarOid": [
-            "1.3.6.1.2.1.1.1.0",
-            "1.3.6.1.2.1.1.2.0"
-          ],
-          "repeatingOid": [
-            "1.3.6.1.2.1.1.1.0",
-            "1.3.6.1.2.1.1.2.0"
-          ],
-          "maxListSize": 10
+          "key": "upsIdentAttachedDevices",
+          "method": "get",
+          "oid": "1.3.6.1.2.1.33.1.1.6.0",
+          "timeout": 6
         }
       ],
       "telemetry": [
         {
-          "key": "ReceivedFromWalk",
-          "community": "private",
-          "method": "walk",
-          "oid": "1.3.6.1.2.1.1.1.0"
-        },
-        {
-          "key": "ReceivedFromTable",
-          "method": "table",
-          "oid": "1.3.6.1.2.1.1"
-        }
-      ],
-      "attributeUpdateRequests": [
-        {
-          "attributeFilter": "dataToSet",
-          "method": "set",
-          "oid": "1.3.6.1.2.1.1.1.0"
-        },
-        {
-          "attributeFilter": "dataToMultiSet",
-          "method": "multiset",
-          "mappings": {
-            "1.2.3": "10",
-            "2.3.4": "${attribute}"
-          }
-        }
-      ],
-      "serverSideRpcRequests": [
-        {
-          "requestFilter": "setData",
-          "method": "set",
-          "oid": "1.3.6.1.2.1.1.1.0"
-        },
-        {
-          "requestFilter": "multiSetData",
-          "method": "multiset"
-        },
-        {
-          "requestFilter": "getData",
+          "key": "upsBatteryStatus",
           "method": "get",
-          "oid": "1.3.6.1.2.1.1.1.0"
+          "oid": "1.3.6.1.2.1.33.1.2.1.0"
         },
         {
-          "requestFilter": "runBulkWalk",
-          "method": "bulkwalk",
-          "oid": [
-            "1.3.6.1.2.1.1.1.0",
-            "1.3.6.1.2.1.1.2.0"
-          ]
+          "key": "upsEstMinutesRemaining",
+          "method": "get",
+          "oid": "1.3.6.1.2.1.33.1.2.3.0"
+        },
+        {
+          "key": "upsEstChargeRemaining",
+          "method": "get",
+          "oid": "1.3.6.1.2.1.33.1.2.4.0"
+        },
+        {
+          "key": "upsBatteryVoltage",
+          "method": "get",
+          "oid": "1.3.6.1.2.1.33.1.2.5.0"
+        },
+        {
+          "key": "upsBatteryTemperature",
+          "method": "get",
+          "oid": "1.3.6.1.2.1.33.1.2.7.0"
+        },
+        {
+          "key": "upsInputVoltage",
+          "method": "get",
+          "oid": "1.3.6.1.2.1.33.1.3.3.1.3.1"
+        },
+        {
+          "key": "upsOutputVoltage",
+          "method": "get",
+          "oid": "1.3.6.1.2.1.33.1.4.4.1.2.1"
+        },
+        {
+          "key": "upsOutputPercLoad",
+          "method": "get",
+          "oid": "1.3.6.1.2.1.33.1.4.4.1.5.1"
+        },
+        {
+          "key": "upsBypassVoltage",
+          "method": "get",
+          "oid": "1.3.6.1.2.1.33.1.5.3.1.2.1",
+          "timeout": 6
         }
       ]
     },
     {
-      "deviceName": "SNMP router",
+      "deviceName": "ups0001",
       "deviceType": "snmp",
-      "ip": "127.0.0.1",
+      "ip": "172.24.80.117",
+      "port": 1610,
       "pollPeriod": 5000,
       "community": "public",
-      "converter": "CustomSNMPConverter",
       "attributes": [
         {
-          "key": "ReceivedFromGetWithCustomConverter",
+          "key": "routerID",
           "method": "get",
-          "oid": "1.3.6.1.2.1.1.1.0"
+          "oid": "1.3.6.1.4.1.14583.800.1.101.1.0",
+          "timeout": 6
+        },
+        {
+          "key": "serviceProvider",
+          "method": "get",
+          "oid": "1.3.6.1.4.1.14583.800.1.3.0",
+          "timeout": 6
+        },
+        {
+          "key": "signalStrengthPerc",
+          "method": "get",
+          "oid": "1.3.6.1.4.1.14583.800.1.5.0",
+          "timeout": 6
+        },
+        {
+          "key": "serviceConnection",
+          "method": "get",
+          "oid": "1.3.6.1.4.1.14583.800.1.8.0",
+          "timeout": 6
         }
       ],
       "telemetry": [
-        {
-          "key": "ReceivedFromTableWithCustomConverter",
-          "method": "table",
-          "oid": "1.3.6.1.2.1.1.1.0"
-        }
       ]
     }
-  ]
+  ],
+  "id": "243c4366-72f3-4df2-8236-cd0cea57717a"
 }
