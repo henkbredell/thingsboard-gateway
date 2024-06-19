@@ -56,7 +56,7 @@ class SNMPUplinkConverter(Converter):
 
             elif isinstance(data, str):
                 print("str")
-                result[config[0]].append({config[1]["key"]: data})
+                result = {config[1]["key"]: data}
             elif isinstance(data, bytes):
                 # hb
                 print("bytes")

@@ -69,6 +69,8 @@ class SNMPConnector(Connector, Thread):
         self.__datatypes = ('attributes', 'telemetry')
 
         self.__loop = asyncio.new_event_loop()
+        self.__short_interval_mode = False
+
 
     def open(self):
         self.__stopped = False
@@ -87,7 +89,11 @@ class SNMPConnector(Connector, Thread):
             current_time = time() * 1000
             for device in self.__devices:
                 try:
-                    if device.get("previous_poll_time", 0) + device.get("pollPeriod", 10000) < current_time:
+                    if device.get("shortIntervalPoll", "false") == "true" and self.__short_interval_mode:
+                        poll_interval = 10000
+                    else:
+                        poll_interval = device.get("pollPeriod", 10000)
+                    if device.get("previous_poll_time", 0) + poll_interval < current_time:
                         await self.__process_data(device)
                         device["previous_poll_time"] = current_time
                 except Exception as e:
@@ -152,8 +158,15 @@ class SNMPConnector(Connector, Thread):
                     #print("<hb> converted data before: ", converted_data)
                     print("device data type", datatype)
                     # converted_data.update(**device["uplink_converter"].convert((datatype, datatype_config), response))
+
+                    # <hb> check if there are alarms active requiring short interval polling
+                    if (datatype_config["key"] == "upsAlarmsPresent") and response > 0:
+                        self.__short_interval_mode = True
+                    else:
+                        self.__short_interval_mode = False
+
                     converted_data[datatype].append(device["uplink_converter"].convert((datatype, datatype_config), response))
-                    print("<hb> converted data after: ", converted_data)
+                    # print("<hb> converted data after: ", converted_data)
                 except SNMPTimeoutException:
                     self._log.error("Timeout exception on connection to device \"%s\" with ip: \"%s\"", device["deviceName"],
                               device["ip"])
