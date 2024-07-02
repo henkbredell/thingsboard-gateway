@@ -69,8 +69,8 @@ class SNMPListener(Connector, Thread):
                            'MessagesSent': 0}
 
         self._default_converters = {
-            "uplink": "SNMPUplinkConverter",
-            "downlink": "SNMPDownlinkConverter"
+            "uplink": "SNMPListenerUplinkConverter",
+            "downlink": "SNMPListenerDownlinkConverter"
         }
         self.__methods = ["listen"]
         self.__datatypes = ('attributes', 'telemetry')
@@ -82,7 +82,7 @@ class SNMPListener(Connector, Thread):
         pysnmp_config.addTransport(
             self.snmpEngine,
             udp.domainName + (1,),
-            udp.UdpTransport().openServerMode(("192.168.88.155", 10162))
+            udp.UdpTransport().openServerMode((self.__devices[0]["ip"], self.__devices[0]["port"]))
         )
         pysnmp_config.addV1System(self.snmpEngine, 'my-area', 'public')
 
@@ -106,11 +106,10 @@ class SNMPListener(Connector, Thread):
         }
         # hb - get the IP address for the SOURCE
         if(transportAddress[0] in self.__device_ips):
-            print("Received new Trap message");
+            print("==== Start of Incoming Trap ====")
             for name, val in varBinds:
-                print(f"IP address {transportAddress[0]}")
+                #print(f"IP address {transportAddress[0]}")
                 #print('%s = %s' % (name.prettyPrint(), val.prettyPrint()))
-
                 # hb - look up the OID values for the traps and messages
                 lookup_name = name.prettyPrint()
                 if(lookup_name in self.__oids):
@@ -124,7 +123,7 @@ class SNMPListener(Connector, Thread):
                     converted_data["deviceName"] = self.__device_ips.get(transportAddress[0])
                     converted_data["attributes"].append(default_device["uplink_converter"].convert(("attributes", default_device["attributes"]), response))
                     # print("<hb> converted data after: ", converted_data)
-                    print(f'{new_name}={new_val}')
+                    # print(f'{new_name}={new_val}')
 
         print("==== End of Incoming Trap ====")
         if isinstance(converted_data, dict) and (converted_data.get("attributes") or converted_data.get("telemetry")):
@@ -146,7 +145,7 @@ class SNMPListener(Connector, Thread):
         while not self.__stopped:
             current_time = time() * 1000
             # hb - in the case of the SNMP listener there will only be one default device to start the listener.
-            # data from different devices will be separated accoring to the SRC IP address of the UDP packets/
+            # data from different devices will be separated according to the SRC IP address of the UDP packets/
             for device in self.__devices:
                 try:
                     poll_interval = device.get("pollPeriod", 0)

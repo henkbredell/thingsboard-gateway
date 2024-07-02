@@ -155,8 +155,8 @@ class SNMPConnector(Connector, Thread):
                     if method not in self.__methods:
                         self._log.error("Unknown method: %s, configuration is: %r", method, datatype_config)
                     response = await self.__process_methods(method, common_parameters, datatype_config)
-                    #print("<hb> converted data before: ", converted_data)
-                    print("device data type", datatype)
+                    # print("converted data before: ", converted_data)
+                    # print("device data type", datatype)
                     # converted_data.update(**device["uplink_converter"].convert((datatype, datatype_config), response))
 
                     # <hb> check if there are alarms active requiring short interval polling
@@ -295,18 +295,19 @@ class SNMPConnector(Connector, Thread):
         try:
             for device in self.__devices:
                 if content["device"] == device["deviceName"]:
-                    for rpc_request_config in device["serverSideRpcRequests"]:
-                        if search(content["data"]["method"], rpc_request_config["requestFilter"]):
-                            common_parameters = self.__get_common_parameters(device)
-                            result = self.__process_methods(rpc_request_config["method"], common_parameters,
-                                                            {**rpc_request_config, "value": content["data"]["params"]})
-                            self._log.debug("Received RPC request for device \"%s\" with command \"%s\" and value \"%s\"",
-                                      content["device"],
-                                      content["data"]["method"])
-                            self._log.debug(result)
-                            self._log.debug(content)
-                            self.__gateway.send_rpc_reply(device=content["device"], req_id=content["data"]["id"],
-                                                          content=result)
+                    if(device.get("serverSideRpcRequests") is not None):
+                        for rpc_request_config in device["serverSideRpcRequests"]:
+                            if search(content["data"]["method"], rpc_request_config["requestFilter"]):
+                                common_parameters = self.__get_common_parameters(device)
+                                result = self.__process_methods(rpc_request_config["method"], common_parameters,
+                                                                {**rpc_request_config, "value": content["data"]["params"]})
+                                self._log.debug("Received RPC request for device \"%s\" with command \"%s\" and value \"%s\"",
+                                          content["device"],
+                                          content["data"]["method"])
+                                self._log.debug(result)
+                                self._log.debug(content)
+                                self.__gateway.send_rpc_reply(device=content["device"], req_id=content["data"]["id"],
+                                                              content=result)
         except Exception as e:
             self._log.exception(e)
             self.__gateway.send_rpc_reply(device=content["device"], req_id=content["data"]["id"], success_sent=False)

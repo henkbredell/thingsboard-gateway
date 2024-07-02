@@ -55,8 +55,13 @@
   "connectors": [
     {
       "type": "snmp_listener",
-      "name": "snmp_listener1",
+      "name": "snmp_listener",
       "configuration": "snmp_listener.json"
+    },
+    {
+      "type": "snmp",
+      "name": "snmp",
+      "configuration": "snmp.json"
     }
   ]
 }

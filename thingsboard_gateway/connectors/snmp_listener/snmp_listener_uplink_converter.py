@@ -16,7 +16,7 @@ from thingsboard_gateway.connectors.converter import Converter
 from thingsboard_gateway.gateway.statistics_service import StatisticsService
 
 
-class SNMPUplinkConverter(Converter):
+class SNMPListenerUplinkConverter(Converter):
     def __init__(self, config, logger):
         self._log = logger
         self.__config = config
@@ -26,44 +26,37 @@ class SNMPUplinkConverter(Converter):
     def convert(self, config, data):
 
         result = {}
-        print("<hb> DATA", data)
+        # print("<hb> DATA", data)
         try:
             if isinstance(data, dict):
-                print("dict")
+                # print("dict")
                 result = data
             elif isinstance(data, list):
-                print("list")
+                # print("list")
                 if isinstance(data[0], str):
-                    print("list - str")
+                    # print("list - str")
                     result[config[0]].append({config[1]["key"]: ','.join(data)})
                 elif isinstance(data[0], dict):
-                    # hb
-                    print("list - dict")
-
+                    # print("list - dict")
                     res = {}
                     for item in data:
                         res.update(**item)
-                    # hb
                     # result[config[0]].append({config[1]["key"]: {str(k): str(v) for k, v in res.items()}})
                     result = {str(config[1]["key"]+"_"+k): str(v) for k, v in res.items()}
 
             elif isinstance(data, str):
-                print("str")
+                #print("str")
                 result = {config[1]["key"]: data}
             elif isinstance(data, bytes):
-                # hb
-                print("bytes")
+                # print("bytes")
                 # result[config[0]].append({config[1]["key"]: data.decode("UTF-8")})
                 result = {config[1]["key"]: data.decode("UTF-8")}
-                # /hb
             else:
-                # hb
-                print("number")
+                # print("number")
                 # result[config[0]].append({config[1]["key"]: data})
                 result = {config[1]["key"]: data}
-                # /hb
             self._log.debug(result)
         except Exception as e:
             self._log.exception(e)
-        print("<hb> result:", result)
+        print("result:", result)
         return result
