@@ -142,7 +142,7 @@ class SNMPConnector(Connector, Thread):
             }
         # /hb
 
-        for datatype in self.__datatypes:
+        for datatype in self.__datatypes:               # i.e. telemetry or attributes
             for datatype_config in device[datatype]:
                 try:
                     response = None

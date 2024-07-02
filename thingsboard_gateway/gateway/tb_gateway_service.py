@@ -76,6 +76,7 @@ DEFAULT_CONNECTORS = {
     "odbc": "OdbcConnector",
     "rest": "RESTConnector",
     "snmp": "SNMPConnector",
+    "snmp_listener": "SNMPListener",
     "ftp": "FTPConnector",
     "socket": "SocketConnector",
     "xmpp": "XMPPConnector",

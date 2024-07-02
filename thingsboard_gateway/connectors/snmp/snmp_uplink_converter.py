@@ -32,7 +32,7 @@ class SNMPUplinkConverter(Converter):
         #    "telemetry": []
         #    }
         result = {}
-        print("<hb> DATA", data)
+        #print("<hb> DATA", data)
         # /hb
         try:
             if isinstance(data, dict):
@@ -65,7 +65,7 @@ class SNMPUplinkConverter(Converter):
                 # /hb
             else:
                 # hb
-                print("else")
+                print("number")
                 # result[config[0]].append({config[1]["key"]: data})
                 result = {config[1]["key"]: data}
                 # /hb
