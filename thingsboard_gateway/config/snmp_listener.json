@@ -1,9 +1,9 @@
 {
   "devices": [
     {
-      "deviceName": "default",
+      "deviceName": "snmp_traps",
       "deviceType": "snmp_listener",
-      "ip": "192.168.88.155",
+      "ip": "192.168.217.10",
       "port": 10162,
       "pollPeriod": 0,
       "community": "public",

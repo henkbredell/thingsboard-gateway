@@ -85,7 +85,7 @@ class DuplicateDetector:
 
             if remaining_attributes_count > 0 or remaining_telemetry_count > 0:
                 log.debug("[%s] '%s' changed attributes %d from %d, changed telemetry %d from %d",
-                          connector_name, device_name,
+                    connector_name, device_name,
                           remaining_attributes_count, remaining_attributes_count + filtered_attributes_count,
                           remaining_telemetry_count, remaining_telemetry_count + filtered_telemetry_count)
                 to_send[DEVICE_NAME_PARAMETER] = device_name
