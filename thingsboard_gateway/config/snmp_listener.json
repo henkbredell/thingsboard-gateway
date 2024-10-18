@@ -3,7 +3,7 @@
     {
       "deviceName": "snmp_traps",
       "deviceType": "snmp_listener",
-      "ip": "192.168.217.10",
+      "ip": "192.168.88.29",
       "port": 10162,
       "pollPeriod": 0,
       "community": "public",
@@ -19,7 +19,9 @@
     }
   ],
   "device_ips": {
-    "172.24.80.117": "ups0002"
+    "172.24.80.117": "ups0002",
+    "172.24.80.126": "ups0001",
+    "172.24.80.118": "ups0003"
   },
   "oids": {
     "1.3.6.1.2.1.1.3.0": "sysUpTime",

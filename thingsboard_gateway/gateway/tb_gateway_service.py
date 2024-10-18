@@ -53,13 +53,13 @@ from thingsboard_gateway.tb_utility.tb_updater import TBUpdater
 from thingsboard_gateway.tb_utility.tb_utility import TBUtility
 
 GRPC_LOADED = False
-try:
-    from thingsboard_gateway.gateway.grpc_service.grpc_connector import GrpcConnector
-    from thingsboard_gateway.gateway.grpc_service.tb_grpc_manager import TBGRPCServerManager
+#try:
+#    from thingsboard_gateway.gateway.grpc_service.grpc_connector import GrpcConnector
+#    from thingsboard_gateway.gateway.grpc_service.tb_grpc_manager import TBGRPCServerManager
 
-    GRPC_LOADED = True
-except ImportError:
-    print("Cannot load GRPC connector!")
+#    GRPC_LOADED = True
+#except ImportError:
+#    print("Cannot load GRPC connector!")
 
 log: TbLogger = None
 main_handler = logging.handlers.MemoryHandler(-1)
