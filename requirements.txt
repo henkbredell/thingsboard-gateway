@@ -16,3 +16,5 @@ cachetools
 cryptography==3.4.*
 tb-mqtt-client>=1.7.1
 service-identity
+pysnmplib
+puresnmp
