@@ -252,7 +252,7 @@
       "ip": "172.24.80.117",
       "port": 161,
       "pollPeriod": 60000,
-      "shortIntervalPoll": "false",
+      "shortIntervalPoll": "true",
       "community": "public",
       "attributes": [
         {

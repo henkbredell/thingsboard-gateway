@@ -106,7 +106,7 @@ class SNMPListener(Connector, Thread):
         }
         # hb - get the IP address for the SOURCE
         if(transportAddress[0] in self.__device_ips):
-            print("==== Start of Incoming Trap ====")
+            print("==== Incoming Trap ====")
             for name, val in varBinds:
                 #print(f"IP address {transportAddress[0]}")
                 #print('%s = %s' % (name.prettyPrint(), val.prettyPrint()))
@@ -125,7 +125,7 @@ class SNMPListener(Connector, Thread):
                     # print("<hb> converted data after: ", converted_data)
                     # print(f'{new_name}={new_val}')
 
-        print("==== End of Incoming Trap ====")
+        # print("==== End of Incoming Trap ====")
         if isinstance(converted_data, dict) and (converted_data.get("attributes") or converted_data.get("telemetry")):
             self.collect_statistic_and_send(self.get_name(), self.get_id(), converted_data)
 

@@ -18,3 +18,4 @@ tb-mqtt-client>=1.7.1
 service-identity
 pysnmplib
 puresnmp
+dnp3-python

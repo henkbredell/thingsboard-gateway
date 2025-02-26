@@ -25,7 +25,7 @@ from thingsboard_gateway.tb_utility.tb_loader import TBModuleLoader
 from thingsboard_gateway.tb_utility.tb_utility import TBUtility
 from thingsboard_gateway.tb_utility.tb_logger import init_logger
 
-# Try import Pymodbus library or install it and import
+# Try import library or install it and import
 installation_required = False
 
 try:
@@ -37,7 +37,7 @@ except ImportError:
     installation_required = True
 
 if installation_required:
-    print("Modbus library not found - installing...")
+    print("Puresnmp library not found - installing...")
     TBUtility.install_package("puresnmp", ">=2.0.0")
 
 # <hb> added import for version of the snmp module
@@ -189,12 +189,13 @@ class SNMPConnector(Connector, Thread):
 
         client.configure(timeout=common_parameters['timeout'])
         client = PyWrapper(client)
-
+        #print('>>', method)
         response = None
 
         if method == "get":
             oid = datatype_config["oid"]
             response = await client.get(oid=oid)
+
         elif method == "multiget":
             oids = datatype_config["oid"]
             oids = oids if isinstance(oids, list) else list(oids)
@@ -301,13 +302,14 @@ class SNMPConnector(Connector, Thread):
                                 common_parameters = self.__get_common_parameters(device)
                                 result = self.__process_methods(rpc_request_config["method"], common_parameters,
                                                                 {**rpc_request_config, "value": content["data"]["params"]})
+                                print('>>>RPC for',content["device"])
                                 self._log.debug("Received RPC request for device \"%s\" with command \"%s\" and value \"%s\"",
                                           content["device"],
                                           content["data"]["method"])
                                 self._log.debug(result)
                                 self._log.debug(content)
-                                self.__gateway.send_rpc_reply(device=content["device"], req_id=content["data"]["id"],
-                                                              content=result)
+                                # hb - self.__gateway.send_rpc_reply(device=content["device"], req_id=content["data"]["id"],
+                                # hb -                              content=result)
         except Exception as e:
             self._log.exception(e)
             self.__gateway.send_rpc_reply(device=content["device"], req_id=content["data"]["id"], success_sent=False)

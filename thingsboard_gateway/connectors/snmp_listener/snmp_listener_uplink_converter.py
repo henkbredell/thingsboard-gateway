@@ -58,5 +58,5 @@ class SNMPListenerUplinkConverter(Converter):
             self._log.debug(result)
         except Exception as e:
             self._log.exception(e)
-        print("result:", result)
+        # print("result:", result)
         return result
